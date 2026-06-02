@@ -1,45 +1,49 @@
-#include<stdio.h>
-#define Max 100
-int graph[Max][Max];
-int indegree[Max];
-int queue[Max];
-int front=0,rear=0;
-int main(){
-    int n,e;
-    printf("Enter number of vertices: ");
-    scanf("%d",&n); 
-    printf("Enter number of edges: ");
-    scanf("%d",&e);
+#include <stdio.h>
 
-    for(int i=0;i<n;i++){
-        indegree[i] = 0;
-        for(int j=0;j<n;j++){
-            graph[i][j] = 0;
+#define MAX 10
+
+int main() {
+    int n;
+    int graph[MAX][MAX];
+    int indegree[MAX] = {0};
+    int visited[MAX] = {0};
+
+    printf("Enter number of vertices: ");
+    scanf("%d", &n);
+
+    printf("Enter adjacency matrix:\n");
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            scanf("%d", &graph[i][j]);
+
+            if (graph[i][j] == 1)
+                indegree[j]++;
         }
     }
-    printf("Enter edges (u v):\n");
-    for(int i=0;i<e;i++){
-        int u,v;
-        scanf("%d %d",&u,&v);
-        graph[u][v] = 1; 
-        indegree[v]++;
-    }
-    for(int i=0;i<n;i++){
-        if(indegree[i] == 0){
-            queue[rear++] = i; 
-        }
-    }
-    printf("Topological Sort: ");
-    while(front < rear){
-        int current = queue[front++];
-        printf("%d ",current);
-        for(int j=0;j<n;j++){
-            if(graph[current][j] == 1){
-                indegree[j]--;
-                if(indegree[j] == 0){
-                    queue[rear++] = j; 
+
+    printf("\nTopological Ordering:\n");
+
+    for (int count = 0; count < n; count++) {
+
+        for (int i = 0; i < n; i++) {
+
+            if (indegree[i] == 0 && !visited[i]) {
+
+                printf("%d ", i);
+                visited[i] = 1;
+
+                // Remove outgoing edges
+                for (int j = 0; j < n; j++) {
+                    if (graph[i][j] == 1)
+                        indegree[j]--;
                 }
+
+                break;
             }
         }
-        return 0;
+    }
+
+    printf("\n");
+
+    return 0;
 }
